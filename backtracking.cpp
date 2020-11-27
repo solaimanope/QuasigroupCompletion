@@ -1,4 +1,3 @@
-
 namespace BackTracking {
     int numberOfNodes;
     int numberOfBacktracks;
@@ -18,7 +17,7 @@ namespace BackTracking {
         const Cell p = unassigned.back();
         unassigned.pop_back();
 
-        for (int x = 1; x <= dim; x++) {
+        for (int x : ValueOrdering::getValueOrderWithoutDomain(cur, p)) {
             cur[p.first][p.second] = x;
             if (backTrack(cur, unassigned)) return true;
             cur[p.first][p.second] = 0;

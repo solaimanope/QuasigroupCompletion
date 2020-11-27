@@ -7,6 +7,7 @@
 #include "tests.h"
 #include "util.cpp"
 #include "variable_ordering.cpp"
+#include "value_ordering.cpp"
 #include "backtracking.cpp"
 #include "forward_checking.cpp"
 #include "maintaining_arc_consistency.cpp"
@@ -20,6 +21,8 @@ int main() {
         {0, 3, 0, 0}
     };
 
+    ValueOrdering::currentOrdering = ValueOrdering::SEQUENTIAL_ORDERING;
+//    ValueOrdering::currentOrdering = ValueOrdering::DIAGONAL_FREQUENCY_ORDERING;
 
     vector< pair< string , Matrix > >testSets;
     testSets.emplace_back("d-10-01", d_10_01);
@@ -30,8 +33,8 @@ int main() {
     testSets.emplace_back("d-15-01", d_15_01);
 
     vector< int >reportedOrderings;
-    reportedOrderings.push_back(VariableOrdering::SDF);
-    reportedOrderings.push_back(VariableOrdering::MIN_DYNAMIC_DEGREE);
+    reportedOrderings.push_back(VariableOrdering::SMALLEST_DOMAIN_FIRST);
+    reportedOrderings.push_back(VariableOrdering::MIN_FORWARD_DEGREE);
     reportedOrderings.push_back(VariableOrdering::BRELAZ);
     reportedOrderings.push_back(VariableOrdering::DOMDDEG);
     reportedOrderings.push_back(VariableOrdering::ROW_MAJOR);

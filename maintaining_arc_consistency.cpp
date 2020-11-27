@@ -62,23 +62,21 @@ namespace MaintainingArcConsistency {
         const int options = domains.back();
 
         bool wentDeeper = false;
-        for (int x = 1; x <= dim; x++) {
-            if (options & (1<<x)) {
-                cur[p.first][p.second] = x;
+        for (int x : ValueOrdering::getValueOrderWithDomain(cur, p, options)) {
+            cur[p.first][p.second] = x;
 
-                vector<int>newDomains(domains);
-                newDomains.back() = 1<<x;
+            vector<int>newDomains(domains);
+            newDomains.back() = 1<<x;
 
-                if (AC3(cur, unassigned, newDomains, unassigned.size()-1)) {
-                    wentDeeper = true;
-                    unassigned.pop_back();
-                    newDomains.pop_back();
-                    if (maintainingArcConsistency(cur, unassigned, newDomains)) return true;
-                    unassigned.push_back(p);
-                }
-
-                cur[p.first][p.second] = 0;
+            if (AC3(cur, unassigned, newDomains, unassigned.size()-1)) {
+                wentDeeper = true;
+                unassigned.pop_back();
+                newDomains.pop_back();
+                if (maintainingArcConsistency(cur, unassigned, newDomains)) return true;
+                unassigned.push_back(p);
             }
+
+            cur[p.first][p.second] = 0;
         }
 
         if (!wentDeeper) numberOfBacktracks++;

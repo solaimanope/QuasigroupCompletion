@@ -1,21 +1,14 @@
 namespace VariableOrdering {
     const int ROW_MAJOR = 0;
-    const int SDF = 1;
+    const int SMALLEST_DOMAIN_FIRST = 1;
     const int MAX_STATIC_DEGREE = 2;
-    const int MIN_DYNAMIC_DEGREE = 3;
+    const int MIN_FORWARD_DEGREE = 3;
     const int BRELAZ = 4;
     const int DOMDEG = 5;
     const int DOMDDEG = 6;
     const int RANDOM = 7;
     const int IBS = 8;
     int currentOrdering;
-
-    bool isDynamicOrdering(int idx) {
-        if (idx == MIN_DYNAMIC_DEGREE || idx == BRELAZ || idx == DOMDDEG || idx == IBS) {
-            return true;
-        }
-        return false;
-    }
 
     int currentDomainSize(const Matrix &cur, const Cell &p) {
         int msk = 0;
@@ -57,7 +50,7 @@ namespace VariableOrdering {
         assert(!unassigned.empty());
         if (currentOrdering == ROW_MAJOR) {
             return unassigned.size()-1;
-        } else if (currentOrdering == SDF) {
+        } else if (currentOrdering == SMALLEST_DOMAIN_FIRST) {
             ///Smallest Domain First
             int idx = -1;
             int sz = cur.size()+1;
@@ -70,8 +63,8 @@ namespace VariableOrdering {
             }
             assert(idx != -1);
             return idx;
-        } else if (currentOrdering == MIN_DYNAMIC_DEGREE) {
-            ///Minimum Degree to Unassigned First
+        } else if (currentOrdering == MIN_FORWARD_DEGREE) {
+            ///Minimum Forward Degree First
             int idx = -1;
             int deg = cur.size()*2;
             for (int i = 0; i < unassigned.size(); i++) {
@@ -101,7 +94,7 @@ namespace VariableOrdering {
             assert(idx != -1);
             return idx;
         } else if (currentOrdering == BRELAZ) {
-            ///Minimum pair(smallest domain, forward degree) First
+            ///Minimum pair(domain size, forward degree) First
             int idx = -1;
             Cell p(cur.size()*cur.size(), cur.size()*cur.size());
             for (int i = 0; i < unassigned.size(); i++) {
@@ -113,8 +106,7 @@ namespace VariableOrdering {
             }
             assert(idx != -1);
             return idx;
-        }
-        else if (currentOrdering == RANDOM) {
+        } else if (currentOrdering == RANDOM) {
             ///Minimum pair(smallest domain, forward degree) First
             int idx = rand()%unassigned.size();
             return idx;
